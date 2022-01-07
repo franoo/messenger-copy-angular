@@ -24,10 +24,11 @@ export class LoginComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.authService.logout();
   }
 
   onFormSubmit(): void {
-    console.log('Name:' + this.loginForm.get('name')?.valueChanges);
+    //console.log('Name:' + this.loginForm.get('name')?.valueChanges);
     if (this.loginForm.invalid) {
       return;
     }
