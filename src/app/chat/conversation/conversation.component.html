@@ -1,1 +1,19 @@
-<p>conversation works!</p>
+<div class="uk-card uk-card-default uk-card-body uk-width-1-2@m">
+    <div *ngIf="this.user">
+        <h3 class="uk-card-title">{{this.user.firstname}} {{this.user.lastname}}</h3>
+        <p>@{{this.user.username}}</p>
+    </div>
+    <div>
+        <ul class="uk-list">
+            <li *ngFor="let textMessage of this.conversation">
+                <div *ngIf="textMessage.senderId == this.user.id">
+                    <app-text-message [message]=textMessage [username]="this.user.username"></app-text-message>
+                </div>
+                <div *ngIf="textMessage.senderId != this.user.id">
+                    <app-text-message [message]=textMessage  [username]="this.yourUsername"></app-text-message>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <app-text-input  (sendMessageEvent)="sendMessage($event)"></app-text-input>
+</div>

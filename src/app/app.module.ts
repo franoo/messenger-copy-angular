@@ -14,6 +14,8 @@ import { AuthInterceptor } from './services/auth.interceptor';
 import { ChatComponent } from './chat/chat.component';
 import { ConversationComponent } from './chat/conversation/conversation.component';
 import { UserInfoComponent } from './chat/userinfo/userinfo.component';
+import { TextMessageComponent } from './chat/text-message/text-message.component';
+import { TextInputComponent } from './chat/text-input/text-input.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,6 +24,8 @@ import { UserInfoComponent } from './chat/userinfo/userinfo.component';
     ChatComponent,
     ConversationComponent,
     UserInfoComponent,
+    TextMessageComponent,
+    TextInputComponent,
     
     
   ],

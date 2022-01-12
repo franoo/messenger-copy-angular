@@ -11,7 +11,7 @@ export class AuthService {
   constructor(private http: HttpClient) {
   }
   loggedUserSubject= new BehaviorSubject<UserLogged>(null as any);
-
+  loggedUserData=this.loggedUserSubject.asObservable();
 
 
   login(userLogin : UserLogin ) {
@@ -43,6 +43,15 @@ export class AuthService {
   public logout(){
     localStorage.removeItem('loggedInUser');
     this.loggedUserSubject.next(null);
-}
+  }
+  public getToken(){
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+    if(loggedInUser){
+      let token = loggedInUser.jwtToken;
+      return token;
+    }
+    return null;
+  }
+
 }
         
