@@ -37,7 +37,8 @@ export class LoginComponent implements OnInit {
     var user = new UserLogin(username, password );
     this.authService.login(user).pipe(first()).subscribe(
       data=>{
-        console.log(data);
+        
+        this.router.navigate(["/chat"]);
     });
   }
 

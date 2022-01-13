@@ -1,10 +1,8 @@
 
-<form [formGroup]="loginForm" (ngSubmit)="onFormSubmit()">
-    username:
-     <input formControlName="username"  placeholder="Enter Username">
-    password: 
-    <input formControlName="password"  placeholder="Enter password">
-    <button type="submit">Submit</button> 
+<form [formGroup]="loginForm" (ngSubmit)="onFormSubmit()" class="uk-width-1-3 uk-align-center" uk-grid>
+     <input formControlName="username"  placeholder="Enter Username">   
+    <input formControlName="password" type="password" placeholder="Enter password">
+    <button type="submit" class="uk-button ">Submit</button> 
   </form> 
 
-  <a routerLink="/chat" routerLinkActive="uk-active">Chat link</a>
+  <!-- <a routerLink="/chat" routerLinkActive="uk-active">Chat link</a> -->

@@ -1,5 +1,5 @@
-<ul class="users">
-    <li *ngFor="let user of this.users" (click)="onUserSelected(user)"  [class.selected]="user === selectedUser">
+<ul class="uk-list users">
+    <li *ngFor="let user of this.users" (click)="onUserSelected(user)"  class="uk-card"[class.selected]="user === selectedUser">
         
          <app-userinfo [user]=user></app-userinfo>
         

@@ -30,10 +30,8 @@ export class MessageService {
   }
 
   sendMessage(message:MessageDTO){; 
-    return this.http.post<MessageDTO>('http://localhost:5000/api/messages', {      ReceiverId:message.ReceiverId,
-     MessageContent:message.MessageContent}).subscribe(data => {
-      console.log(data); 
-    });
+    return this.http.post<Message>('http://localhost:5000/api/messages', {      ReceiverId:message.ReceiverId,
+     MessageContent:message.MessageContent});
   }
 
 }

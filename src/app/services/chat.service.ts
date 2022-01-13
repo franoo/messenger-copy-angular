@@ -1,6 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import * as signalR from '@microsoft/signalr';          // import signalR
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { MessageDTO } from '../models/messageDTO.model';
 import { Message } from '../models/message.model';
@@ -14,10 +14,12 @@ import { AuthService } from './auth.service';
 })
 export class ChatService {
   
+    private connectionId: string;
      private  connection: any;
      readonly POST_URL = "https://localhost:5000/api/messages"
      private receivedMessageObject: Message = new Message(null,null,null,'',null);
      private sharedObj = new Subject<Message>();
+    // public receivedObjData = this.sharedObj.asObservable();
 
   constructor(private http: HttpClient, private authService: AuthService) { 
     this.connection = new signalR.HubConnectionBuilder().withUrl("http://localhost:5000/chatsocket", {
@@ -33,6 +35,8 @@ export class ChatService {
       await this.start();
     });
     this.connection.on("ReceiveOne", (Id: number, SenderId:number, ReceiverId:number, MessageContent:string, Date:Date) => {
+      const message =new Message(Id,SenderId,ReceiverId,MessageContent,Date);
+      console.log(message);
       this.sharedObj.next(new Message(Id,SenderId,ReceiverId,MessageContent,Date));
     });
     //.then(()=>  this.getConnectionId());            
@@ -57,14 +61,22 @@ export class ChatService {
     
   public getConnectionId = () => {
     this.connection.invoke('getConnectionId').then(
-      (data: any) => {
+      (data: string) => {
         console.log('idConection', data);
-        //his.saveSocketConnection(data).subscribe(response => {
-         // console.log('save socket connection works', response);
+        this.connectionId = data;
+        this.sendConnectionIdToServer(data);
         });
   }
     
-  
+  private sendConnectionIdToServer(data:string){
+    console.log("what i send to backend:"+ data)
+    let body={
+      "connectionId": data
+    };
+    this.http.post('http://localhost:5000/api/users/updateconnectionid',body).subscribe(data => {
+      console.log(data);
+    });
+  }
 
    // Calls the controller method
    public broadcastMessage(msgDto: MessageDTO) {
@@ -73,7 +85,10 @@ export class ChatService {
   }
 
   public sendMessage(msg: MessageDTO){
-    return this.http.post(this.POST_URL, msg);
+    //  this.connection.invoke("SendMessage", "212", msg.MessageContent).then( (data: any) => {
+    //   console.log(data);
+    //   });
+    
   }
 
   public retrieveMappedObject(): Observable<Message> {

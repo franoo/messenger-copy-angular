@@ -16,6 +16,7 @@ import { ConversationComponent } from './chat/conversation/conversation.componen
 import { UserInfoComponent } from './chat/userinfo/userinfo.component';
 import { TextMessageComponent } from './chat/text-message/text-message.component';
 import { TextInputComponent } from './chat/text-input/text-input.component';
+import { LogoutComponent } from './authentication/logout/logout.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,6 +27,7 @@ import { TextInputComponent } from './chat/text-input/text-input.component';
     UserInfoComponent,
     TextMessageComponent,
     TextInputComponent,
+    LogoutComponent,
     
     
   ],

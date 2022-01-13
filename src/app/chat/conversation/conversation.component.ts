@@ -3,6 +3,8 @@ import { Message } from 'src/app/models/message.model';
 
 import { MessageDTO } from 'src/app/models/messageDTO.model';
 import { User } from 'src/app/models/user.model';
+import { UserLogged } from 'src/app/models/userLogged.model';
+import { AuthService } from 'src/app/services/auth.service';
 import { ChatService } from 'src/app/services/chat.service';
 import { MessageService } from 'src/app/services/message.service';
 
@@ -13,25 +15,26 @@ import { MessageService } from 'src/app/services/message.service';
 })
 export class ConversationComponent implements OnInit {
 
-  constructor(private chatService: ChatService, private messageService:MessageService){ 
+  constructor(private chatService: ChatService, 
+              private messageService:MessageService, 
+              private authService:AuthService){ 
   }
   user: User = null;
   conversation: Message[]=[];
   yourUsername='Ty';
 
   ngOnInit(): void {
- 
-    //this.messageService.getMessagesFromConversation(this.user.id).subscribe(data => this.setConversation(data));
-    this.chatService.retrieveMappedObject().subscribe( (receivedObj: Message) => { this.addToInbox(receivedObj);}); 
+    this.chatService.retrieveMappedObject().subscribe( (receivedObj: Message) => { 
+      if(receivedObj.senderId == this.user.id )
+        this.addToInbox(receivedObj);
+    }); 
     this.messageService.selectedUserData.subscribe(data=>{
         this.user=data;
         if(this.user != null){
-            this.messageService.getMessagesFromConversation(this.user.id)
-            .subscribe((data : Message[]) =>{
-                this.conversation = data;
+           //this.get
                 console.log(this.conversation);
-
-            })
+          this.getMessages();
+            
         }
       });
   }
@@ -39,6 +42,14 @@ export class ConversationComponent implements OnInit {
 
   addToInbox(obj: Message) {
     this.conversation.push(obj);
+
+  }
+
+  private getMessages(){
+    this.messageService.getMessagesFromConversation(this.user.id)
+    .subscribe((data : Message[]) =>{
+        this.conversation = data;
+      });
   }
 
   setConversation(obj: Message[]){
@@ -47,6 +58,10 @@ export class ConversationComponent implements OnInit {
   sendMessage(event : any){
     const messageDTO = new MessageDTO(this.user.id,event);
     console.log(messageDTO);
-    this.messageService.sendMessage(messageDTO);
+    //for sending message to DB and SignalR
+    this.messageService.sendMessage(messageDTO).subscribe((data:Message) => {
+      this.addToInbox(data);
+    });
+    //this.chatService.sendMessage(messageDTO);
   }
 }
